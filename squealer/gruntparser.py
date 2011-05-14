@@ -24,7 +24,6 @@ class GruntParser(BaseGruntParser):
     _AliasOverrides = None
 
     def __init__(self, stream, alias_overrides):
-        # super(GruntParser, self).__init__(stream)
         BaseGruntParser.__init__(self, stream)
         self._AliasOverrides = alias_overrides
 
