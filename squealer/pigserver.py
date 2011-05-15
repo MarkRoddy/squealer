@@ -1,8 +1,9 @@
 
-from squealer.gruntparser import GruntParser
 
 from java.io import File
 from java.io import FileReader
+
+from squealer.gruntparser import GruntParser
 
 from org.apache.pig import PigServer as BasePigServer
 

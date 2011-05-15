@@ -1,8 +1,6 @@
 
-from org.apache.pig.tools.grunt import GruntParser as BaseGruntParser
-from java.util.regex import Matcher
 from java.util.regex import Pattern
-
+from org.apache.pig.tools.grunt import GruntParser as BaseGruntParser
 
 class GruntParser(BaseGruntParser):
     """
