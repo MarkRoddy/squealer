@@ -5,8 +5,6 @@ from org.apache.hadoop.fs import FileSystem
 from org.apache.hadoop.fs import Path
 from org.apache.pig.backend.hadoop.datastorage import ConfigurationUtil
 
-# from org.apache.pig.test import Util
-
 class Cluster(object):
     """
     Encapsulates all the file system operations.
