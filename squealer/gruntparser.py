@@ -31,7 +31,7 @@ class GruntParser(BaseGruntParser):
         """Pig relations that have been blanked are dropped."""
         command = self.override(cmd)
         if command:
-            GruntParser.processPig(self, command)
+            BaseGruntParser.processPig(self, command)
 
     def override(self, query):
         """
