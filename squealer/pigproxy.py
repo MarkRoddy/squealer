@@ -52,7 +52,7 @@ class PigProxy(object):
     
     def assertOutput(self, alias, expected_list):
         self.register_script()
-        self.assertEquals('\n'.join(expected_list), '\n'.join(self.get_alias(alias)))
+        self.assertEquals('\n'.join(expected_list), '\n'.join([str(i) for i in self.get_alias(alias)]))
 
     def assertLastOutput(self, expected_list):
         """
@@ -60,7 +60,17 @@ class PigProxy(object):
         """
         self.register_script()
         alias = self.alias_overrides["LAST_STORE_ALIAS"]
-        self.assertOutput('\n'.join(expected_list), '\n'.join([str(i) for i in self.get_alias(alias)]))
+        self.assertOutput(alias, expected_list)
+
+    def assertEquals(self, expected, actual):
+        if not expected == actual:
+            raise AssertionError("""
+Expected Output:
+%s
+
+Actual Output:
+%s
+""" % (expected, actual))
 
     def register_script(self):
         """
