@@ -2,12 +2,9 @@
 from squealer.gruntparser import GruntParser
 
 from java.io import File
-from java.io import IOException
 from java.io import FileReader
-from java.io import FileNotFoundException;
 
 from org.apache.pig import PigServer as BasePigServer
-from org.apache.pig.tools.pigscript.parser import ParseException
 
 
 class PigServer(BasePigServer):
