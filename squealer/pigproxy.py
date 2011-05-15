@@ -5,9 +5,12 @@ from squealer.cluster import Cluster
 
 from java.io import BufferedReader, StringReader, StringWriter, File, PrintWriter
 
-from org.apache.pig.tools.parameters import ParameterSubstitutionPreprocessor
-from java.lang import System
 
+from org.apache.pig.data import DataType
+from org.apache.pig.tools.parameters import ParameterSubstitutionPreprocessor
+from java.lang import System, StringBuilder
+
+from org.apache.pig.impl.logicalLayer.schema import Schema
 
 from org.apache.pig import ExecType
 EXEC_CLUSTER = "pigunit.exectype.cluster"
@@ -49,7 +52,7 @@ class PigProxy(object):
             f.close()
         return cls(pig_code, args, arg_files)
     fromFile = classmethod(fromFile)
-    
+
     def assertOutput(self, alias, expected_list):
         self.register_script()
         self.assertEquals('\n'.join(expected_list), '\n'.join([str(i) for i in self.get_alias(alias)]))
@@ -61,6 +64,12 @@ class PigProxy(object):
         self.register_script()
         alias = self.alias_overrides["LAST_STORE_ALIAS"]
         self.assertOutput(alias, expected_list)
+
+    def assertOutputEqualsFile(self, file_obj):
+        """
+        Like assertLastOutput() but checks that last store is equal to data in a file
+        """
+        self.assertLastOutput([s[:-1] for s in file_obj.readlines()])
 
     def assertEquals(self, expected, actual):
         if not expected == actual:
@@ -123,6 +132,45 @@ Actual Output:
             self.cluster = Cluster(self.pig.getPigContext())
         return self.cluster
 
+    def run_script(self):
+        self.register_script()
+
     def get_alias(self, alias):
         self.register_script()
         return iter(self.pig.openIterator(alias))
+
+    def override(self, alias, query):
+        """
+        Replaces the query of an aliases by another query.
+
+        For example:
+            B = FILTER A BY count > 5;
+        overridden with:
+            <B, B = FILTER A BY name == 'Pig';>
+        becomes
+            B = FILTER A BY name == 'Pig';
+
+        alias: The alias to override.
+        query: The new value of the alias.
+        """
+        self.alias_overrides[alias] = query
+
+    def unoverride(self, alias):
+        """Remove an override placed on an alias"""
+        if alias in self.alias_overrides:
+            del self.alias_overrides[alias]        
+
+    def overrideToData(self, alias, input_data):
+        """
+        Override a statement so that the alias results in having the
+        specified set of data
+        """
+        self.register_script()
+        sb = []
+        sb = StringBuilder()
+        Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
+        
+        destination = "pigunit-input-overriden.txt"
+        self.cluster.copyContentFromLocalFile(input_data, destination, True)
+        self.override(alias, "%s = LOAD '%s' AS %s;" % (alias, destination, sb.toString()))
+
