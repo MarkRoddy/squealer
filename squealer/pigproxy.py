@@ -1,19 +1,16 @@
 
-from squealer.pigserver import PigServer
+
 from squealer.cluster import Cluster
+from squealer.pigserver import PigServer
 
-
+from java.lang import System, StringBuilder
 from java.io import BufferedReader, StringReader, StringWriter, File, PrintWriter
 
-
-from org.apache.pig.data import DataType
-from org.apache.pig.tools.parameters import ParameterSubstitutionPreprocessor
-from java.lang import System, StringBuilder
-
-from org.apache.pig.impl.logicalLayer.schema import Schema
-
 from org.apache.pig import ExecType
-EXEC_CLUSTER = "pigunit.exectype.cluster"
+from org.apache.pig.data import DataType
+from org.apache.pig.impl.logicalLayer.schema import Schema
+from org.apache.pig.tools.parameters import ParameterSubstitutionPreprocessor
+
 
 class PigProxy(object):
     """Functionality for interacting with the pig interpreter"""
@@ -124,7 +121,7 @@ Actual Output:
         but right now I'm trying to get this out the door.
         """
         if not self.cluster:
-            if (System.getProperties().containsKey(EXEC_CLUSTER)):
+            if (System.getProperties().containsKey("pigunit.exectype.cluster")):
                 self.pig = PigServer(ExecType.MAPREDUCE)
             else:
                 self.pig = PigServer(ExecType.LOCAL)
