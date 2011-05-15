@@ -30,14 +30,8 @@ class PigServer(BasePigServer):
         Parses and registers the pig script.
         file_name:  The Pig script file.
         alias_overrides: The list of aliases to override in the Pig script.
-        raises IOException If the Pig script can't be parsed correctly.
         """
-        try:
-            grunt = GruntParser(FileReader(File(file_name)), alias_overrides)
-            grunt.setInteractive(False)
-            grunt.setParams(self)
-            grunt.parseStopOnError(True)
-        except FileNotFoundException, e:
-            raise IOException(e.getCause())
-        except ParseException, e:
-            raise IOException(e.getCause())
+        grunt = GruntParser(FileReader(File(file_name)), alias_overrides)
+        grunt.setInteractive(False)
+        grunt.setParams(self)
+        grunt.parseStopOnError(True)
