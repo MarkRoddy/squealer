@@ -1,5 +1,5 @@
 
-from java.io import IOException, PrintWriter
+from java.io import IOException, PrintWriter, OutputStreamWriter
 
 from org.apache.hadoop.fs import FileSystem
 from org.apache.hadoop.fs import Path
@@ -41,7 +41,7 @@ class Cluster(object):
     def copyContentFromLocalFile(self, content, dest_path, overwrite = True):
         file_path = Path(dest_path)
         fs = file_path.getFileSystem(self.configuration)
-        if overwrite and fs.exist(file_path):
+        if overwrite and fs.exists(file_path):
             fs.delete(file_path, True)
         self.createInputFile(fs, dest_path, content)
 
@@ -65,12 +65,12 @@ class Cluster(object):
         return fs1.getFileStatus(local).getLen() == fs2.getFileStatus(dest).getLen()
     
 
-    def createInputFile(fs, fileName, input_data):
+    def createInputFile(self, fs, fileName, input_data):
         if(fs.exists(Path(fileName))):
             raise IOException("File " + fileName + " already exists on the minicluster")
         stream = fs.create(Path(fileName))
         pw = PrintWriter(OutputStreamWriter(stream, "UTF-8"))
-        for i in xrange(input_data.length):
+        for i in xrange(len(input_data)):
             pw.println(input_data[i])
         pw.close();
 
