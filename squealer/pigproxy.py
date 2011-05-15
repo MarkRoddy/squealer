@@ -54,6 +54,14 @@ class PigProxy(object):
         self.register_script()
         self.assertEquals('\n'.join(expected_list), '\n'.join(self.get_alias(alias)))
 
+    def assertLastOutput(self, expected_list):
+        """
+        Like assertOutput() but operates on the last STORE command
+        """
+        self.register_script()
+        alias = self.alias_overrides["LAST_STORE_ALIAS"]
+        self.assertOutput('\n'.join(expected_list), '\n'.join([str(i) for i in self.get_alias(alias)]))
+
     def register_script(self):
         """
         Registers a pig scripts with its variables substituted.
@@ -80,6 +88,8 @@ class PigProxy(object):
         pw.close()
 
         pigSubstitutedFile = f.getCanonicalPath()
+        print "Running: " + pigSubstitutedFile
+
         self.pig.registerScript(pigSubstitutedFile, self.alias_overrides)
 
     def getCluster(self):
