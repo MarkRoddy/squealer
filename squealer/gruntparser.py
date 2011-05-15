@@ -27,6 +27,11 @@ class GruntParser(BaseGruntParser):
         BaseGruntParser.__init__(self, stream)
         self._AliasOverrides = alias_overrides
 
+    def processPig(self, cmd):
+        """Pig relations that have been blanked are dropped."""
+        command = self.override(cmd)
+        if command:
+            GruntParser.processPig(self, command)
 
     def override(self, query):
         """
