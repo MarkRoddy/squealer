@@ -55,7 +55,7 @@ class TestPigProxy(unittest.TestCase):
             "twitter\t7",
             "facebook\t10",
             "yahoo\t15",
-            "facebook\t5",
+            "facebook\t2",
             "a\t1",
             "b\t2",
             "c\t3",
@@ -64,7 +64,7 @@ class TestPigProxy(unittest.TestCase):
             ]
         output = [
         "(yahoo,25L)",
-        "(facebook,15L)",
+        "(facebook,12L)",
         "(twitter,7L)",
             ]
         test.overrideToData("data", input_data)
