@@ -188,19 +188,20 @@ class TestPigProxy(unittest.TestCase):
             ]
         self.assertOutput(proxy, "queries_limit", output)
 
-#     def testStore(self):
-#         args = [
-#             "n=3",
-#             "reducers=1",
-#             "input=" + self.INPUT_FILE,
-#             "output=top_3_queries",
-#             ]
-#         proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+    def testStore(self):
+        args = [
+            "n=3",
+            "reducers=1",
+            "input=" + self.INPUT_FILE,
+            "output=top_3_queries",
+            ]
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
 
-#         # By default all STORE and DUMP commands are removed
-#         proxy.unoverride("STORE")
-#         proxy.run_script()
-#         self.assertTrue(proxy.cluster.delete(Path("top_3_queries")))
+        # By default all STORE and DUMP commands are removed
+        proxy.unoverride("STORE")
+        proxy.run_script()
+        self.assert_(proxy.cluster.delete(Path("top_3_queries")))
+
 
 if __name__ == '__main__':
     unittest.main()
