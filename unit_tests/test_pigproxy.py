@@ -46,13 +46,13 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        test = PigProxy.fromFile(self.PIG_SCRIPT, args)        
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)        
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        self.assertLastOutput(test, output)
+        self.assertLastOutput(proxy, output)
 
     def testTextInput(self):
         args = [
@@ -61,7 +61,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        test = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
         input_data = [
             "yahoo\t10",
             "twitter\t7",
@@ -79,8 +79,8 @@ class TestPigProxy(unittest.TestCase):
         "(facebook,12L)",
         "(twitter,7L)",
             ]
-        test.overrideToData("data", input_data)
-        self.assertOutput(test, "queries_limit", output)
+        proxy.overrideToData("data", input_data)
+        self.assertOutput(proxy, "queries_limit", output)
 
     def testSubset(self):
         args = [
@@ -89,7 +89,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        test = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
         input_data = [
             "yahoo\t10",
             "twitter\t7",
@@ -107,8 +107,8 @@ class TestPigProxy(unittest.TestCase):
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        test.overrideToData("data", input_data)
-        self.assertOutput(test, "queries_limit", output);
+        proxy.overrideToData("data", input_data)
+        self.assertOutput(proxy, "queries_limit", output);
 
     def testOverride(self):
         args = [
@@ -117,13 +117,13 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        test = PigProxy.fromFile(self.PIG_SCRIPT, args)
-        test.override("queries_limit", "queries_limit = LIMIT queries_ordered 2;");
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy.override("queries_limit", "queries_limit = LIMIT queries_ordered 2;");
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
             ]
-        self.assertLastOutput(test, output);
+        self.assertLastOutput(proxy, output);
 
     def testInlinePigScript(self):
         script = '\n'.join([
@@ -134,13 +134,13 @@ class TestPigProxy(unittest.TestCase):
             "queries_limit = LIMIT queries_ordered 3;",
             "STORE queries_limit INTO 'top_3_queries';",
             ])        
-        test = PigProxy(script);
+        proxy = PigProxy(script);
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        self.assertLastOutput(test, output)
+        self.assertLastOutput(proxy, output)
 
     def testGetLastAlias(self):
         script = '\n'.join([
@@ -151,12 +151,12 @@ class TestPigProxy(unittest.TestCase):
             "queries_limit = LIMIT queries_ordered 3;",
             "STORE queries_limit INTO 'top_3_queries';",
             ])
-        test = PigProxy(script)
+        proxy = PigProxy(script)
         expected = \
         "(yahoo,25L)\n" + \
         "(facebook,15L)\n" + \
         "(twitter,7L)"
-        self.assertEquals(expected, '\n'.join([str(i) for i in test.get_alias("queries_limit")]))
+        self.assertEquals(expected, '\n'.join([str(i) for i in proxy.get_alias("queries_limit")]))
 
     def testWithUdf(self):
         script = '\n'.join([
@@ -168,13 +168,13 @@ class TestPigProxy(unittest.TestCase):
             "queries_limit = LIMIT queries_ordered 3;",
             "STORE queries_limit INTO 'top_3_queries';",
             ])
-        test = PigProxy(script);
+        proxy = PigProxy(script);
         output = [
             "(yahoo,{(yahoo)})",
             "(yahoo,{(yahoo)})",
             "(twitter,{(twitter)})",
             ]
-        self.assertLastOutput(test, output);
+        self.assertLastOutput(proxy, output);
 
 
 
@@ -182,10 +182,10 @@ class TestPigProxy(unittest.TestCase):
 #         argsFile = [
 #             "test-data/top_queries_params.txt"
 #             ]
-#         test = PigProxy.fromFile(self.PIG_SCRIPT, arg_files = argsFile)
+#         proxy = PigProxy.fromFile(self.PIG_SCRIPT, arg_files = argsFile)
 #         fobj = open("test-data/top_queries_expected_top_3.txt")
 #         try:
-#             test.assertOutputEqualsFile(fobj)
+#             proxy.assertOutputEqualsFile(fobj)
 #         finally:
 #             fobj.close()
 
@@ -198,12 +198,12 @@ class TestPigProxy(unittest.TestCase):
 #             "input=" + self.INPUT_FILE,
 #             "output=top_3_queries",
 #             ]
-#         test = PigProxy.fromFile(self.PIG_SCRIPT, args)
+#         proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
 
 #         # By default all STORE and DUMP commands are removed
-#         test.unoverride("STORE")
-#         test.run_script()
-#         self.assertTrue(test.cluster.delete(Path("top_3_queries")))
+#         proxy.unoverride("STORE")
+#         proxy.run_script()
+#         self.assertTrue(proxy.cluster.delete(Path("top_3_queries")))
 
 if __name__ == '__main__':
     unittest.main()
