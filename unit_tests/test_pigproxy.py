@@ -80,7 +80,7 @@ class TestPigProxy(unittest.TestCase):
         "(facebook,12L)",
         "(twitter,7L)",
             ]
-        proxy.overrideToData("data", input_data)
+        proxy.override_to_data("data", input_data)
         self.assertOutput(proxy, "queries_limit", output)
 
     def testSubset(self):
@@ -108,7 +108,7 @@ class TestPigProxy(unittest.TestCase):
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        proxy.overrideToData("data", input_data)
+        proxy.override_to_data("data", input_data)
         self.assertOutput(proxy, "queries_limit", output);
 
     def testOverride(self):

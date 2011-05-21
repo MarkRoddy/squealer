@@ -112,7 +112,7 @@ class PigProxy(object):
         if alias in self.alias_overrides:
             del self.alias_overrides[alias]        
 
-    def overrideToData(self, alias, input_data):
+    def override_to_data(self, alias, input_data):
         """
         Override a statement so that the alias results in having the
         specified set of data

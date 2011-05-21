@@ -43,7 +43,7 @@ class PigTest(unittest.TestCase):
 
     def override_data(self, alias, data):
         """Override the data in a relation with the records specified"""
-        self._proxy.overrideToData(alias, data)
+        self._proxy.override_to_data(alias, data)
 
     def override_query(self, alias, query):
         """
