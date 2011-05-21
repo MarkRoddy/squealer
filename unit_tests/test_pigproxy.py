@@ -31,7 +31,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
@@ -46,7 +46,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)        
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)        
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
@@ -61,7 +61,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         input_data = [
             "yahoo\t10",
             "twitter\t7",
@@ -89,7 +89,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         input_data = [
             "yahoo\t10",
             "twitter\t7",
@@ -117,7 +117,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         proxy.override("queries_limit", "queries_limit = LIMIT queries_ordered 2;");
         output = [
             "(yahoo,25L)",
@@ -180,7 +180,7 @@ class TestPigProxy(unittest.TestCase):
         argsFile = [
             "test-data/top_queries_params.txt"
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, arg_files = argsFile)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, arg_files = argsFile)
         output = [
             "(yahoo,25L)",
             "(facebook,15L)",
@@ -195,7 +195,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
 
         # By default all STORE and DUMP commands are removed
         proxy.unoverride("STORE")
@@ -209,7 +209,7 @@ class TestPigProxy(unittest.TestCase):
             "input=" + self.INPUT_FILE,
             "output=top_3_queries",
             ]
-        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         self.assertEqual("queries_limit", proxy.last_stored_alias_name())
 
 if __name__ == '__main__':

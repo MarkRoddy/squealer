@@ -23,7 +23,7 @@ class PigTest(unittest.TestCase):
         if not self.Args:
             self.Args = {}
         arglist = ["%s=%s"%(k,v) for (k,v) in self.Args.iteritems()]
-        self._proxy = PigProxy.fromFile(self.PigScript, arglist)
+        self._proxy = PigProxy.from_file(self.PigScript, arglist)
 
     def relation(self, alias):
         """

@@ -42,14 +42,14 @@ class PigProxy(object):
             "DUMP" : "",
             }
 
-    def fromFile(cls, pig_script, args = None, arg_files = None):
+    def from_file(cls, pig_script, args = None, arg_files = None):
         f = open(pig_script, 'r')
         try:
             pig_code = f.read()
         finally:
             f.close()
         return cls(pig_code, args, arg_files)
-    fromFile = classmethod(fromFile)
+    from_file = classmethod(from_file)
 
     def register_script(self):
         """
