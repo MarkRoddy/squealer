@@ -33,3 +33,15 @@ class PigServer(BasePigServer):
         grunt.setInteractive(False)
         grunt.setParams(self)
         grunt.parseStopOnError(True)
+
+    def dumpSchema(self, alias):
+        """
+        Overriding as this method in the base class prints to stdout
+        for no good reason.
+        """
+        lp = self.getPlanFromAlias(alias, "describe")
+        lp = self.compileLp(alias, False)
+
+        for lo in lp.getLeaves():
+            if lo.getAlias() == alias:
+                return lo.getSchema()
