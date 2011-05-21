@@ -126,7 +126,6 @@ class PigProxy(object):
         specified set of data
         """
         self.register_script()
-        sb = []
         sb = StringBuilder()
         Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
         
