@@ -2,6 +2,7 @@
 import sys
 import unittest
 from squealer.pigproxy import PigProxy
+from org.apache.log4j import LogManager, Level
 from org.apache.pig.data import Tuple as PigTuple
 
 
@@ -117,7 +118,15 @@ class TestProgram(unittest.TestProgram):
     def runTests(self):
         if self.testRunner is None:
             self.testRunner = TextTestRunner(verbosity=self.verbosity)
+        if 2 != self.verbosity:
+            self.silence_logs()
         result = self.testRunner.run(self.test)
         sys.exit(not result.wasSuccessful())
+
+    def silence_logs(self):
+        """Turn off logging messages in pig"""
+        off = Level.toLevel("OFF")
+        log = LogManager.getRootLogger()
+        log.setLevel(off)
 
 main = TestProgram
