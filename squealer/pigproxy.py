@@ -28,14 +28,8 @@ class PigProxy(object):
         arg_files: The list of file arguments of the script.
         """
         self.orig_pig_code = pig_code
-        if args:
-            self.args = args
-        else:
-            self.args = []
-        if arg_files:
-            self.arg_files = arg_files
-        else:
-            self.arg_files = []
+        self.args = args or []
+        self.arg_files = arg_files or []
         self.alias_overrides = {
             "STORE" : "",
             "DUMP" : "",
