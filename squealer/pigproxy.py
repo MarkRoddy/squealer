@@ -1,4 +1,5 @@
 
+from tempfile import mktemp
 
 from squealer.cluster import Cluster
 from squealer.pigserver import PigServer
@@ -147,7 +148,7 @@ class PigProxy(object):
         sb = StringBuilder()
         Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
         
-        destination = "pigunit-input-overriden.txt"
+        destination = mktemp()
         self.cluster.copyContentFromLocalFile(input_data, destination, True)
         self.override(alias, "%s = LOAD '%s' AS %s;" % (alias, destination, sb.toString()))
 
