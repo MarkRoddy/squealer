@@ -62,12 +62,6 @@ class PigProxy(object):
         alias = self.alias_overrides["LAST_STORE_ALIAS"]
         self.assertOutput(alias, expected_list)
 
-    def assertOutputEqualsFile(self, file_obj):
-        """
-        Like assertLastOutput() but checks that last store is equal to data in a file
-        """
-        self.assertLastOutput([s[:-1] for s in file_obj.readlines()])
-
     def assertEquals(self, expected, actual):
         if not expected == actual:
             raise AssertionError("""

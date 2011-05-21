@@ -130,20 +130,6 @@ class TestPigProxy(unittest.TestCase):
             ]
         test.assertLastOutput(output);
 
-    def testFileOutput(self):
-        args = [
-            "n=3",
-            "reducers=1",
-            "input=" + self.INPUT_FILE,
-            "output=top_3_queries",
-            ]
-        test = PigProxy.fromFile(self.PIG_SCRIPT, args)
-        fobj = open("test-data/top_queries_expected_top_3.txt")
-        try:
-            test.assertOutputEqualsFile(fobj)
-        finally:
-            fobj.close()
-
     def testGetLastAlias(self):
         script = '\n'.join([
             "data = LOAD '%s' AS (query:CHARARRAY, count:INT);" % self.INPUT_FILE,
