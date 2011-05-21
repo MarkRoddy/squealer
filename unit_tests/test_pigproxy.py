@@ -12,6 +12,18 @@ class TestPigProxy(unittest.TestCase):
     PIG_SCRIPT = "pig-scripts/top_queries.pig"
     INPUT_FILE = "test-data/top_queries_input_data.txt"
 
+    def assertOutput(self, proxy, alias, expected_list):
+        proxy.register_script()
+        self.assertEquals('\n'.join(expected_list), '\n'.join([str(i) for i in proxy.get_alias(alias)]))
+
+    def assertLastOutput(self, proxy, expected_list):
+        """
+        Like assertOutput() but operates on the last STORE command
+        """
+        proxy.register_script()
+        alias = proxy.alias_overrides["LAST_STORE_ALIAS"]
+        self.assertOutput(proxy, alias, expected_list)
+
     def testNtoN(self):
         args = [
             "n=3",
@@ -25,7 +37,7 @@ class TestPigProxy(unittest.TestCase):
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        proxy.assertOutput("queries_limit", output)
+        self.assertOutput(proxy, "queries_limit", output)
 
     def testImplicitNtoN(self):
         args = [
@@ -40,7 +52,7 @@ class TestPigProxy(unittest.TestCase):
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        test.assertLastOutput(output)
+        self.assertLastOutput(test, output)
 
     def testTextInput(self):
         args = [
@@ -68,7 +80,7 @@ class TestPigProxy(unittest.TestCase):
         "(twitter,7L)",
             ]
         test.overrideToData("data", input_data)
-        test.assertOutput("queries_limit", output)
+        self.assertOutput(test, "queries_limit", output)
 
     def testSubset(self):
         args = [
@@ -96,7 +108,7 @@ class TestPigProxy(unittest.TestCase):
             "(twitter,7L)",
             ]
         test.overrideToData("data", input_data)
-        test.assertOutput("queries_limit", output);
+        self.assertOutput(test, "queries_limit", output);
 
     def testOverride(self):
         args = [
@@ -111,7 +123,7 @@ class TestPigProxy(unittest.TestCase):
             "(yahoo,25L)",
             "(facebook,15L)",
             ]
-        test.assertLastOutput(output);
+        self.assertLastOutput(test, output);
 
     def testInlinePigScript(self):
         script = '\n'.join([
@@ -128,7 +140,7 @@ class TestPigProxy(unittest.TestCase):
             "(facebook,15L)",
             "(twitter,7L)",
             ]
-        test.assertLastOutput(output);
+        self.assertLastOutput(test, output)
 
     def testGetLastAlias(self):
         script = '\n'.join([
@@ -162,7 +174,7 @@ class TestPigProxy(unittest.TestCase):
             "(yahoo,{(yahoo)})",
             "(twitter,{(twitter)})",
             ]
-        test.assertLastOutput(output);
+        self.assertLastOutput(test, output);
 
 
 
