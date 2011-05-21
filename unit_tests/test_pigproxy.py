@@ -176,20 +176,17 @@ class TestPigProxy(unittest.TestCase):
             ]
         self.assertLastOutput(proxy, output);
 
-
-
-#     def testArgFiles(self):
-#         argsFile = [
-#             "test-data/top_queries_params.txt"
-#             ]
-#         proxy = PigProxy.fromFile(self.PIG_SCRIPT, arg_files = argsFile)
-#         fobj = open("test-data/top_queries_expected_top_3.txt")
-#         try:
-#             proxy.assertOutputEqualsFile(fobj)
-#         finally:
-#             fobj.close()
-
-
+    def testArgFiles(self):
+        argsFile = [
+            "test-data/top_queries_params.txt"
+            ]
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, arg_files = argsFile)
+        output = [
+            "(yahoo,25L)",
+            "(facebook,15L)",
+            "(twitter,7L)",
+            ]
+        self.assertOutput(proxy, "queries_limit", output)
 
 #     def testStore(self):
 #         args = [
