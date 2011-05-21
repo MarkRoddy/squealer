@@ -35,14 +35,6 @@ class PigTest(unittest.TestCase):
             output.append(self._to_python(t))
         return output
 
-    def last_stored(self):
-        """
-        Returns the name of the relation that was last stored
-        in the pig script
-        """
-        self._proxy.register_script()
-        return self._proxy.alias_overrides["LAST_STORE_ALIAS"]
-
     def _to_python(self, value):
         """Converts a pig/java data type to its python equivilant"""
         if isinstance(value, PigTuple):
@@ -76,12 +68,12 @@ class PigTest(unittest.TestCase):
 
     def assertLastStoreEquals(self, expected):
         """Assert that the alias in the last STORE operation of the script had the expected records"""
-        alias = self.getLastStoredRelationName()
+        alias = self._proxy.last_stored_alias_name()
         self.assertRelationEquals(alias, expected)
 
     def assertLastStoreEqualsFile(self, file_path, sep = ','):
         """Assert that the alias in the last STORE operation of the script is equal to data in file"""
-        relation_name = self.getLastStoredRelationName()
+        relation_name = self._proxy.last_stored_alias_name()
         actual_records = self.relation(relation_name)
         first_actual_record = actual_records[0]
         type_list = map(lambda x: x.__class__, first_actual_record)

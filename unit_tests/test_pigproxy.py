@@ -202,6 +202,15 @@ class TestPigProxy(unittest.TestCase):
         proxy.run_script()
         self.assert_(proxy.cluster.delete(Path("top_3_queries")))
 
+    def testLastStoreName(self):
+        args = [
+            "n=3",
+            "reducers=1",
+            "input=" + self.INPUT_FILE,
+            "output=top_3_queries",
+            ]
+        proxy = PigProxy.fromFile(self.PIG_SCRIPT, args)
+        self.assertEqual("queries_limit", proxy.last_stored_alias_name())
 
 if __name__ == '__main__':
     unittest.main()

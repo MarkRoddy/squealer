@@ -108,6 +108,14 @@ class PigProxy(object):
         self.register_script()
         return iter(self.pig.openIterator(alias))
 
+    def last_stored_alias_name(self):
+        """
+        Returns the name of the relation that was last stored
+        in the pig script
+        """
+        self.register_script()
+        return self.alias_overrides["LAST_STORE_ALIAS"]
+
     def override(self, alias, query):
         """
         Replaces the query of an aliases by another query.
