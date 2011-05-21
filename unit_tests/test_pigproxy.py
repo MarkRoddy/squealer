@@ -1,6 +1,7 @@
 
 import unittest
 from org.apache.hadoop.fs import Path
+from squealer.cluster import Cluster
 from squealer.pigproxy import PigProxy
 
 
@@ -189,18 +190,22 @@ class TestPigProxy(unittest.TestCase):
         self.assertOutput(proxy, "queries_limit", output)
 
     def testStore(self):
+        from tempfile import mktemp
+        tempdir = mktemp()
+        outfile = tempdir + '/top_3_queries'
         args = [
             "n=3",
             "reducers=1",
             "input=" + self.INPUT_FILE,
-            "output=top_3_queries",
+            "output=" + outfile,
             ]
         proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
 
         # By default all STORE and DUMP commands are removed
         proxy.unoverride("STORE")
         proxy.run_script()
-        self.assert_(proxy.cluster.delete(Path("top_3_queries")))
+        cluster = Cluster(proxy.pig.getPigContext())
+        self.assert_(cluster.delete(Path(outfile)))
 
     def testLastStoreName(self):
         args = [

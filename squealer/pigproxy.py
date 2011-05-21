@@ -20,7 +20,6 @@ class PigProxy(object):
     args = None
     arg_files = None
     alias_overrides = None    
-    cluster = None
     
     def __init__(self, pig_code, args = None, arg_files = None):
         """
@@ -41,6 +40,10 @@ class PigProxy(object):
             "STORE" : "",
             "DUMP" : "",
             }
+        if (System.getProperties().containsKey("pigunit.exectype.cluster")):
+            self.pig = PigServer(ExecType.MAPREDUCE)
+        else:
+            self.pig = PigServer(ExecType.LOCAL)
 
     def from_file(cls, pig_script, args = None, arg_files = None):
         f = open(pig_script, 'r')
@@ -62,8 +65,6 @@ class PigProxy(object):
         else has called it (even methods that call other methods that call it (assertOutput()
         calls get_alias() which both call this method).  
         """
-        self.getCluster()
-
         pigIStream = BufferedReader(StringReader(self.orig_pig_code))
         pigOStream =  StringWriter()
 
@@ -79,28 +80,7 @@ class PigProxy(object):
         pigSubstitutedFile = f.getCanonicalPath()
         print "Running: " + pigSubstitutedFile
 
-        self.pig.registerScript(pigSubstitutedFile, self.alias_overrides)
-
-    def getCluster(self):
-        """
-        Connects and starts if needed the PigServer.
-        return: The cluster where input files can be copied.
-
-        todo: this code is directly translated from the Java PigUnit implementation, and is
-        a major structural limitation as it forces there to be a single PigServer per
-        instance (which has some side affects that are not readily apparent). This may or may
-        not be what the user desires.  At the very least the consumer should be able to
-        specify if they want this behavior or not.  This will be addressed in the future,
-        but right now I'm trying to get this out the door.
-        """
-        if not self.cluster:
-            if (System.getProperties().containsKey("pigunit.exectype.cluster")):
-                self.pig = PigServer(ExecType.MAPREDUCE)
-            else:
-                self.pig = PigServer(ExecType.LOCAL)
-
-            self.cluster = Cluster(self.pig.getPigContext())
-        return self.cluster
+        self.pig.registerScript(pigSubstitutedFile, self.alias_overrides)        
 
     def run_script(self):
         self.register_script()
@@ -149,6 +129,7 @@ class PigProxy(object):
         Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
         
         destination = mktemp()
-        self.cluster.copyContentFromLocalFile(input_data, destination, True)
+        cluster = Cluster(self.pig.getPigContext())
+        cluster.copyContentFromLocalFile(input_data, destination, True)
         self.override(alias, "%s = LOAD '%s' AS %s;" % (alias, destination, sb.toString()))
 
