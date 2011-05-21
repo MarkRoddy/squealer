@@ -1,4 +1,5 @@
 
+import sys
 import unittest
 from squealer.pigproxy import PigProxy
 from org.apache.pig.data import Tuple as PigTuple
@@ -17,12 +18,12 @@ class PigTest(unittest.TestCase):
 
     PigScript = ''
     Args = None
-    
+
     def __init__(self, *args, **kwargs):
         unittest.TestCase.__init__(self, *args, **kwargs)
         if not self.Args:
             self.Args = {}
-        arglist = ["%s=%s"%(k,v) for (k,v) in self.Args.iteritems()]
+        arglist = ["%s=%s" % (k, v) for (k, v) in self.Args.iteritems()]
         self._proxy = PigProxy.from_file(self.PigScript, arglist)
 
     def relation(self, alias):
@@ -60,7 +61,7 @@ class PigTest(unittest.TestCase):
         query: The new value of the alias.
         """
         self._proxy.override(alias, query)
-        
+
     def assertRelationEquals(self, alias, expected):
         """Assert that the specified alias has the expected set of records"""
         actual = self.relation(alias)
@@ -86,8 +87,37 @@ class PigTest(unittest.TestCase):
                 for i,v in enumerate(str_vals):
                     t = type_list[i]
                     casted_vals.append(t(v))
-                expected_records.append( tuple(casted_vals) )
+                casted_record = tuple(casted_vals)
+                expected_records.append(casted_record)
         finally:
             fobj.close()
         self.assertEqual(expected_records, actual_records)
 
+class _TextTestResult(unittest._TextTestResult):
+
+    def printErrorList(self, flavour, errors):
+        for test, err in errors:
+            self.stream.writeln(self.separator1)
+            self.stream.writeln("%s: %s" % (flavour,self.getDescription(test)))
+            if isinstance(test, PigTest):
+                script = test._proxy.pig_script()
+                if script:
+                    self.stream.writeln("Script Run: %s" % script)
+            self.stream.writeln(self.separator2)
+            self.stream.writeln("%s" % err)
+
+
+class TextTestRunner(unittest.TextTestRunner):
+
+    def _makeResult(self):
+        return _TextTestResult(self.stream, self.descriptions, self.verbosity)
+
+class TestProgram(unittest.TestProgram):
+
+    def runTests(self):
+        if self.testRunner is None:
+            self.testRunner = TextTestRunner(verbosity=self.verbosity)
+        result = self.testRunner.run(self.test)
+        sys.exit(not result.wasSuccessful())
+
+main = TestProgram

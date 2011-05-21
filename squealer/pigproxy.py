@@ -20,6 +20,7 @@ class PigProxy(object):
     args = None
     arg_files = None
     alias_overrides = None    
+    _temp_pig_script = None
     
     def __init__(self, pig_code, args = None, arg_files = None):
         """
@@ -72,9 +73,16 @@ class PigProxy(object):
         pw.close()
 
         pigSubstitutedFile = f.getCanonicalPath()
-        print "Running: " + pigSubstitutedFile
+        self._temp_pig_script = pigSubstitutedFile
 
         self.pig.registerScript(pigSubstitutedFile, self.alias_overrides)        
+
+    def pig_script(self):
+        """
+        Returns the path to the pig script containing all modifications
+        due to overrides.
+        """
+        return self._temp_pig_script
 
     def run_script(self):
         self.register_script()
