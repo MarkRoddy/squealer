@@ -9,7 +9,7 @@ class TestPigTest(unittest.TestCase):
 
     def testNtoN(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -26,7 +26,7 @@ class TestPigTest(unittest.TestCase):
 
     def testImplicitNtoN(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -43,7 +43,7 @@ class TestPigTest(unittest.TestCase):
 
     def testTextInput(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -73,7 +73,7 @@ class TestPigTest(unittest.TestCase):
 
     def testSubset(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -103,7 +103,7 @@ class TestPigTest(unittest.TestCase):
 
     def testOverride(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -134,7 +134,7 @@ class TestPigFloatingPointTest(unittest.TestCase):
 
     def testRelationAlmostequals_AreAlmostEqual(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
@@ -156,7 +156,7 @@ class TestPigFloatingPointTest(unittest.TestCase):
 
     def testRelationAlmostequals_AreNotAlmostEqual(self):
         class some_test(PigTest):
-            Args = {
+            Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }

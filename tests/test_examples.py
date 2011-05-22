@@ -25,11 +25,11 @@ class ExampleTest(PigTest):
     # a path relative to where you'll be running your tests.
     PigScript = "tests/pig-scripts/top_queries.pig"
 
-    # There are several values you can specify vai the Args dictionary,
-    # though the most common ones are parameters.  In this case the
-    # pig script under test uses parameters $input and $output.  This
-    # parameter is completely optional though.  
-    Args = {
+    # To specify parameters for the pig script, create a class
+    # attribute named 'Parameters' set to a dictionary containing
+    # the parameter names/values you wish to specify. This attribute
+    # is not necessary if your script does not have any parameters
+    Parameters = {
         "input" : "tests/data/top_queries_input_data.txt",
         "output" : "top_3_queries",
         }

@@ -9,7 +9,7 @@ data =
 queries_group = 
     GROUP data 
     BY query
-    PARALLEL $reducers;
+    PARALLEL 1;
 
 queries_sum = 
     FOREACH queries_group 
@@ -20,8 +20,8 @@ queries_sum =
 queries_ordered = 
     ORDER queries_sum 
     BY count DESC
-    PARALLEL $reducers;
+    PARALLEL 1;
             
-queries_limit = LIMIT queries_ordered $n;
+queries_limit = LIMIT queries_ordered 3;
 
 STORE queries_limit INTO '$output';
