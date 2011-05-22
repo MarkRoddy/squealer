@@ -106,5 +106,46 @@ class ExampleTest(PigTest):
         self.assertLastStoreEquals(output)
 
 
+class TestPigScriptWithFloatingPointOperations(PigTest):
+    """
+    In addition to doing strict comparisons of data, Squealer
+    also supports performing approximations of equality for
+    floating point numbers.  This is particularly useful if
+    you are doing a large amount of floating point arithmetic
+    whose exact results are dependent on the floating point
+    implementation of the particular system (in the case of
+    Pig, this would be the JVM).  Using aproximation is much
+    easier than attempting to determine the exact resulting
+    value, especially for complex operations.
+    """
+    
+    PigScript = "tests/pig-scripts/top_queries_floating_point.pig"
+
+    Parameters = {
+        "input" : "tests/data/top_queries_input_data.txt",
+        "output" : "top_3_queries",
+        }
+
+    def testRelationWithFloatingPointValues(self):
+        input_data = [
+            ("yahoo", 10.000001),
+            ("yahoo", 15.000003),
+            ("facebook", 2.000001),
+            ]
+        self.override_data("data", input_data)
+        
+        output = [
+            ('yahoo',25.000002), # Off by 0.000002
+            ('facebook',2.0000008), # Off by 0.000007
+            ]
+        # To perform an exproximate comparison for equality call
+        # the assertRelationAlmostEquals() method instead of 
+        # assertRelationEquals(), passing in the number of digits
+        # of precision to be used in the comparison.  For non-float
+        # values a strict equality operation is performed.
+        self.assertRelationAlmostEquals("queries_sum", output, places = 4);
+
+
+
 if __name__ == '__main__':
     main()
