@@ -1,2 +1,78 @@
-squealer is a jython library for unit testing Apache Pig scripts.
+Squealer is a jython library for unit testing Apache Pig scripts.
 
+Motivation
+*****************************************
+Starting with v0.8 Pig comes with a library known as PigUnit that can
+be used for unit testing pig scripts from java (or any other JVM
+compatible language).  This served as an inspiration and starting
+point for Squealer but is suboptimal in several aspects which 
+this library hopes to solve:
+
+1) All equality comparisons are done by converting data to strings and 
+checking for string equality.  This makes testing scripts doing floating
+point arithmetic nearly impossible.
+
+2) PigUnit keeps a static reference to the Pig run time which prevents
+the implementation of isolated tests.  This can result in tests which
+passing tests that should be failing and vice versa.  This could also
+result in non-deterministic failing of tests that should be failing
+if the ordering of test execution is changing.
+
+3) PigUnit currently only works with Pig 0.8+ (though anyone is free
+to back port it).  However, due to the dynamic nature of python it 
+is trivial to write a single library which supports multiple versions 
+of Pig.
+
+4) Language preference.  Also, this yak isn't going to shave itself.
+
+
+Dependencies/Installation
+*****************************************
+Currently Squealer is tested against Pig 0.5.0 and Jython 2.2.1, though
+if you can confirm/deny it's feasibility on other versions this information
+would be highly appreciated.  A version matrix is planned for the future
+to documented what combinations of these libraries are supported. Of note
+is that these versions are what is available in the Ubuntu 10.04 and 
+Cloudera apt repositories.
+
+Once the dependencies are installed, installation of Squealer is as simple
+as dropping it into any directory in your PYTHONPATH.  For a stock Ubuntu
+install this can be accomplished by dropping the directory into 
+/usr/share/jython/Lib
+
+
+* Examples
+*****************************************
+In tests/test_examples.py is a test case that illustrates how to define
+a unit test with Squealer and some common tasks you may want to perform
+in one.
+
+
+* Debugging
+*****************************************
+Note that the script executed is in the error output
+
+
+* Common issues
+*****************************************
+1) You see the following error message:
+ImportError: no module named squealer
+
+This indicates that the Jython run time can not find your copy of the Squealer 
+library.  A common mistake with jython is to set the PYTHONPATH environment 
+variable and expect this to be used as is with CPython.  To specify the path
+to jython use the -Dpython.path=... command line argument, alternatively a
+common practice is to use a bash alias so that the PYTHONPATH variable is
+used like it is in CPython:
+alias jython="jython -Dpython.path=\$PYTHONPATH"
+
+2) You see any of the following error messages:
+ImportError: no module named org
+ImportError: no module named apache
+ImportError: no module named hadoop
+
+The Jython run time can not find the jars containing the required Pig/Hoop
+dependencies.  You will need to set your class path so that they can be 
+found.  On a system with Ubuntu/Cloudera packages installed the following
+should get you going:
+export CLASSPATH=/usr/lib/pig/*:/usr/share/java/*:/usr/lib/hadoop/*
