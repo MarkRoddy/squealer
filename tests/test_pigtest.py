@@ -4,8 +4,8 @@ from squealer.pigtest import PigTest
 
 class TestPigTest(unittest.TestCase):
 
-    PIG_SCRIPT = "pig-scripts/top_queries.pig"
-    INPUT_FILE = "test-data/top_queries_input_data.txt"
+    PIG_SCRIPT = "tests/pig-scripts/top_queries.pig"
+    INPUT_FILE = "tests/data/top_queries_input_data.txt"
 
     def testNtoN(self):
         class some_test(PigTest):
@@ -138,7 +138,7 @@ class TestPigTest(unittest.TestCase):
                 }
             PigScript = self.PIG_SCRIPT
             def testFileOutput(self):
-                fobj = open("test-data/top_queries_expected_top_3.txt")
+                fobj = open("tests/data/top_queries_expected_top_3.txt")
                 try:
                     self.assertLastStoreEqualsFile(fobj)
                 finally:

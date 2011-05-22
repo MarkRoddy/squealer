@@ -10,8 +10,8 @@ class TestPigProxy(unittest.TestCase):
     proxy = None
     cluster = None
 
-    PIG_SCRIPT = "pig-scripts/top_queries.pig"
-    INPUT_FILE = "test-data/top_queries_input_data.txt"
+    PIG_SCRIPT = "tests/pig-scripts/top_queries.pig"
+    INPUT_FILE = "tests/data/top_queries_input_data.txt"
 
     def assertOutput(self, proxy, alias, expected_list):
         proxy.register_script()
@@ -179,7 +179,7 @@ class TestPigProxy(unittest.TestCase):
 
     def testArgFiles(self):
         argsFile = [
-            "test-data/top_queries_params.txt"
+            "tests/data/top_queries_params.txt"
             ]
         proxy = PigProxy.from_file(self.PIG_SCRIPT, arg_files = argsFile)
         output = [
