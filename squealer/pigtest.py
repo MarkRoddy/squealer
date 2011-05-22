@@ -78,26 +78,6 @@ class PigTest(unittest.TestCase):
         alias = self._proxy.last_stored_alias_name()
         self.assertRelationEquals(alias, expected)
 
-    def assertLastStoreEqualsFile(self, file_path, sep = ','):
-        """Assert that the alias in the last STORE operation of the script is equal to data in file"""
-        relation_name = self._proxy.last_stored_alias_name()
-        actual_records = self.relation(relation_name)
-        first_actual_record = actual_records[0]
-        type_list = map(lambda x: x.__class__, first_actual_record)
-        fobj = open(file_path)
-        expected_records = []
-        try:
-            for r in fobj:
-                str_vals = r.split(sep)
-                casted_vals = []
-                for i,v in enumerate(str_vals):
-                    t = type_list[i]
-                    casted_vals.append(t(v))
-                casted_record = tuple(casted_vals)
-                expected_records.append(casted_record)
-        finally:
-            fobj.close()
-        self.assertEqual(expected_records, actual_records)
 
 class _TextTestResult(unittest._TextTestResult):
 

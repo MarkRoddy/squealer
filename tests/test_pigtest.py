@@ -117,22 +117,6 @@ class TestPigTest(unittest.TestCase):
                 self.assertLastStoreEquals(output)
         test = some_test('testOverride')
         test.testOverride()
-            
-    def testFileOutput(self):
-        class some_test(PigTest):
-            Args = {
-                "input" : self.INPUT_FILE,
-                "output" : "top_3_queries",
-                }
-            PigScript = self.PIG_SCRIPT
-            def testFileOutput(self):
-                fobj = open("tests/data/top_queries_expected_top_3.txt")
-                try:
-                    self.assertLastStoreEqualsFile(fobj)
-                finally:
-                    fobj.close()
-        test = some_test('testFileOutput')
-        test.testFileOutput()
 
 
 if __name__ == '__main__':
