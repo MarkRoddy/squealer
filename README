@@ -11,7 +11,9 @@ this library hopes to solve:
 
 1) All equality comparisons are done by converting data to strings and 
 checking for string equality.  This makes testing scripts doing floating
-point arithmetic nearly impossible.
+point arithmetic nearly impossible.  It also requires you to know the
+ordering of records in a relation, in practice this can be somewhat
+difficult for a number of operations in Pig.
 
 2) PigUnit keeps a static reference to the Pig run time which prevents
 the implementation of isolated tests.  This can result in tests which
