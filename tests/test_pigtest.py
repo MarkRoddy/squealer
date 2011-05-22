@@ -50,16 +50,16 @@ class TestPigTest(unittest.TestCase):
             PigScript = self.PIG_SCRIPT
             def testTextInput(self):
                 input_data = [
-                    "yahoo\t10",
-                    "twitter\t7",
-                    "facebook\t10",
-                    "yahoo\t15",
-                    "facebook\t2",
-                    "a\t1",
-                    "b\t2",
-                    "c\t3",
-                    "d\t4",
-                    "e\t5",
+                    ("yahoo", 10),
+                    ("twitter", 7),
+                    ("facebook", 10),
+                    ("yahoo", 15),
+                    ("facebook", 2),
+                    ("a", 1),
+                    ("b", 2),
+                    ("c", 3),
+                    ("d", 4),
+                    ("e", 5),
                     ]
                 output = [
                     ("yahoo",25),
@@ -80,16 +80,16 @@ class TestPigTest(unittest.TestCase):
             PigScript = self.PIG_SCRIPT
             def testSubset(self):
                 input_data = [
-                    "yahoo\t10",
-                    "twitter\t7",
-                    "facebook\t10",
-                    "yahoo\t15",
-                    "facebook\t2",
-                    "a\t1",
-                    "b\t2",
-                    "c\t3",
-                    "d\t4",
-                    "e\t5",
+                    ("yahoo", 10),
+                    ("twitter", 7),
+                    ("facebook", 10),
+                    ("yahoo", 15),
+                    ("facebook", 2),
+                    ("a", 1),
+                    ("b", 2),
+                    ("c", 3),
+                    ("d", 4),
+                    ("e", 5),
                     ]
                 output = [
                     ('yahoo',25),
