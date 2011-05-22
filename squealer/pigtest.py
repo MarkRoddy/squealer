@@ -64,9 +64,11 @@ class PigTest(unittest.TestCase):
         """
         self._proxy.override(alias, query)
 
-    def assertRelationEquals(self, alias, expected):
+    def assertRelationEquals(self, alias, expected, order_matters = False):
         """Assert that the specified alias has the expected set of records"""
         actual = self.relation(alias)
+        if not order_matters:
+            expected,actual = self.sortRelations(expected, actual)
         self.assertEqual(expected, actual)
 
     def assertLastStoreEquals(self, expected):

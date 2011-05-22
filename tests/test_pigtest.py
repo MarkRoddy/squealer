@@ -24,6 +24,40 @@ class TestPigTest(unittest.TestCase):
         test = some_test('testNoToN')
         test.testNoToN()
 
+    def testNtoNWithDifferentOrdering_OrderingDoesntMatter(self):
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testNtoNWithDifferentOrdering_OrderingDoesntMatter(self):
+                output = [
+                    ('yahoo',25),
+                    ('twitter',7),
+                    ('facebook',15),
+                    ]
+                self.assertRelationEquals("queries_limit", output)
+        test = some_test('testNtoNWithDifferentOrdering_OrderingDoesntMatter')
+        test.testNtoNWithDifferentOrdering_OrderingDoesntMatter()
+
+    def testNtoNWithDifferentOrdering_OrderingDoesMatter(self):
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testNtoNWithDifferentOrdering_OrderingDoesMatter(self):
+                output = [
+                    ('yahoo',25),
+                    ('twitter',7),
+                    ('facebook',15),
+                    ]
+                self.assertRelationEquals("queries_limit", output, order_matters = True)
+        test = some_test('testNtoNWithDifferentOrdering_OrderingDoesMatter')
+        self.assertRaises(self.failureException, test.testNtoNWithDifferentOrdering_OrderingDoesMatter)
+
     def testImplicitNtoN(self):
         class some_test(PigTest):
             Parameters = {
