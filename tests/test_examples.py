@@ -35,11 +35,7 @@ class ExampleTest(PigTest):
         }
     
     def testSimpleAssertionOfARelationsRecords(self):
-        """
-        Assert the expected set of records for one of the
-        relations in the pig script.
-        """
-
+        """Assert the expected set of records for a relation"""
         # Pig relations contain an interable of tuple objects,
         # one for each record in the relation.  To construct
         # the expected set of records, create a list of tuples
@@ -53,6 +49,35 @@ class ExampleTest(PigTest):
         # To perform the actual assertion specify the name of the
         # relation and pass in the expected records
         self.assertRelationEquals("queries_limit", output)
+
+    def testIgnoringOrderingOfRecords(self):
+        """
+        Assert the expected set of records for a relation, ignoring
+        the order in which they appear.
+        """
+        # For certain Pig operations, it can be difficult to determine
+        # the order in which the records will be in for a relation. For
+        # instance if a group and then aggregate function is performed.
+        # However, in many of these cases you may not care about the
+        # ordering. To deal with this, all equality assertions take an
+        # optional argument `ignore_ordering`.  If False a strict
+        # comparison is performed taking into account the order in which
+        # the records appear, otherwise if True, the order of the expected
+        # records in the relation are ignored.
+        # Note that the default value for ignore_ordering is True so all
+        # comparisons will ignore the ordering unless explicitly specified
+        # not to.
+
+        # Actual records in the pig script:
+        # ('yahoo',25)
+        # ('facebook',15)
+        # ('twitter',7)
+        output = [
+            ('yahoo',25),
+            ('twitter',7), 
+            ('facebook',15),
+            ]        
+        self.assertRelationEquals("queries_limit", output, ignore_ordering = True)
 
     def testOverrideLoadCommandWithSpecifiedData(self):
         """Explicitly specify the set of records a relation should have"""
