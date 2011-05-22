@@ -146,11 +146,38 @@ class TextTestRunner(unittest.TextTestRunner):
 
 class TestProgram(unittest.TestProgram):
 
+    def parseArgs(self, argv):
+        import getopt
+        try:
+            options, args = getopt.getopt(argv[1:], 'hHvq',
+                                          ['help','verbose','quiet'])
+            for opt, value in options:
+                if opt in ('-h','-H','--help'):
+                    self.usageExit()
+                if opt in ('-q','--quiet'):
+                    self.verbosity = 0
+                if opt in ('-v','--verbose'):
+                    self.verbosity = 2
+
+            # Disable Logging unless verbose mode
+            # explicitly requested
+            if 2 != self.verbosity:
+                self.silence_logs()
+
+            if len(args) == 0 and self.defaultTest is None:
+                self.test = self.testLoader.loadTestsFromModule(self.module)
+                return
+            if len(args) > 0:
+                self.testNames = args
+            else:
+                self.testNames = (self.defaultTest,)
+            self.createTests()
+        except getopt.error, msg:
+            self.usageExit(msg)
+
     def runTests(self):
         if self.testRunner is None:
             self.testRunner = TextTestRunner(verbosity=self.verbosity)
-        if 2 != self.verbosity:
-            self.silence_logs()
         result = self.testRunner.run(self.test)
         sys.exit(not result.wasSuccessful())
 
