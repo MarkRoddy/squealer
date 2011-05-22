@@ -31,7 +31,7 @@ of Pig.
 
 Dependencies/Installation
 *****************************************
-Currently Squealer is tested against Pig 0.5.0 and Jython 2.2.1, though
+Currently Squealer is tested against Pig 0.8.0 and Jython 2.2.1, though
 if you can confirm/deny it's feasibility on other versions this information
 would be highly appreciated.  A version matrix is planned for the future
 to documented what combinations of these libraries are supported. Of note
