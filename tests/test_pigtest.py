@@ -54,7 +54,7 @@ class TestPigTest(unittest.TestCase):
                     ('twitter',7),
                     ('facebook',15),
                     ]
-                self.assertRelationEquals("queries_limit", output, order_matters = True)
+                self.assertRelationEquals("queries_limit", output, ignore_ordering = False)
         test = some_test('testNtoNWithDifferentOrdering_OrderingDoesMatter')
         self.assertRaises(self.failureException, test.testNtoNWithDifferentOrdering_OrderingDoesMatter)
 

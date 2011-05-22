@@ -64,10 +64,10 @@ class PigTest(unittest.TestCase):
         """
         self._proxy.override(alias, query)
 
-    def assertRelationEquals(self, alias, expected, order_matters = False):
+    def assertRelationEquals(self, alias, expected, ignore_ordering = True):
         """Assert that the specified alias has the expected set of records"""
         actual = self.relation(alias)
-        if not order_matters:
+        if ignore_ordering:
             expected,actual = self.sortRelations(expected, actual)
         self.assertEqual(expected, actual)
 
@@ -76,7 +76,7 @@ class PigTest(unittest.TestCase):
         alias = self._proxy.last_stored_alias_name()
         self.assertRelationEquals(alias, expected)
 
-    def assertRelationAlmostEquals(self, alias, expected, places = 7, order_matters = False):
+    def assertRelationAlmostEquals(self, alias, expected, places = 7, ignore_ordering = True):
         """
         Assert that the alias is equal the expected set of records except for in the
         case of floating point values.  These are compared for equality up to the
@@ -86,7 +86,7 @@ class PigTest(unittest.TestCase):
         if len(actual) != len(expected):
             self.failRelationsNotEqual(expected, actual)
 
-        if not order_matters:
+        if ignore_ordering:
             expected,actual = self.sortRelations(expected, actual)
 
         # Compare each tuple in expected and actual
