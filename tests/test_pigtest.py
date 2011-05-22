@@ -118,6 +118,64 @@ class TestPigTest(unittest.TestCase):
         test = some_test('testOverride')
         test.testOverride()
 
+class TestPigFloatingPointTest(unittest.TestCase):
+
+    PIG_SCRIPT = "tests/pig-scripts/top_queries_floating_point.pig"
+    INPUT_FILE = "tests/data/top_queries_input_data.txt"
+
+    def test_almostEqual_AreAlmostEqual(self):       
+        self.assert_(PigTest.almostEqual(25.000002, 25.000003814697266, 4))
+
+    def test_almostEqual_NotAlmostEqual_IntegerPart(self):
+        self.assert_(not PigTest.almostEqual(28.000002, 25.000003814697266, 4))
+
+    def test_almostEqual_NotAlmostEqual_TooManyPointsApart(self):
+        self.assert_(not PigTest.almostEqual(28.00001, 25.000003814697266, 4))
+
+    def testRelationAlmostequals_AreAlmostEqual(self):
+        class some_test(PigTest):
+            Args = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testRelationAlmostequals(self):
+                input_data = [
+                    ("yahoo", 10.000001),
+                    ("yahoo", 15.000003),
+                    ("facebook", 2.000001),
+                    ]
+                output = [
+                    ('yahoo',25.000002),
+                    ('facebook',2.0000008),
+                    ]
+                self.override_data("data", input_data)
+                self.assertRelationAlmostEquals("queries_sum", output, 4);
+        test = some_test('testRelationAlmostequals')
+        test.testRelationAlmostequals()
+
+    def testRelationAlmostequals_AreNotAlmostEqual(self):
+        class some_test(PigTest):
+            Args = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testRelationAlmostequals_AreNotAlmostEqual(self):
+                input_data = [
+                    ("yahoo", 10.000001),
+                    ("yahoo", 15.000003),
+                    ("facebook", 2.000001),
+                    ]
+                output = [
+                    ('yahoo',25.000002),
+                    ('facebook',2.04),
+                    ]
+                self.override_data("data", input_data)
+                self.assertRaises(self.failureException, self.assertRelationAlmostEquals, "queries_sum", output)
+        test = some_test('testRelationAlmostequals_AreNotAlmostEqual')
+        test.testRelationAlmostequals_AreNotAlmostEqual()
+
 
 if __name__ == '__main__':
     unittest.main()

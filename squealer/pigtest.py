@@ -78,6 +78,54 @@ class PigTest(unittest.TestCase):
         alias = self._proxy.last_stored_alias_name()
         self.assertRelationEquals(alias, expected)
 
+    def assertRelationAlmostEquals(self, alias, expected, places = 7, order_matters = False):
+        """
+        Assert that the alias is equal the expected set of records except for in the
+        case of floating point values.  These are compared for equality up to the
+        specified number of decimal places.
+        """
+        actual = self.relation(alias)
+        if len(actual) != len(expected):
+            self.failRelationsNotEqual(expected, actual)
+
+        if not order_matters:
+            expected,actual = self.sortRelations(expected, actual)
+
+        # Compare each tuple in expected and actual
+        are_almost_equal = True
+        for i,expected_tuple in enumerate(expected):
+            actual_tuple = actual[i]
+            if not len(actual_tuple) == len(expected_tuple):
+                self.failRelationsNotEqual(expected,actual)
+
+            # Compare expected and actual value in each tuple
+            for j,expected_value in enumerate(expected_tuple):
+                actual_value = actual_tuple[j]
+                if isinstance(expected_value, float):
+                    are_almost_equal &= self.almostEqual(expected_value, actual_value, places)
+                else:
+                    are_almost_equal &= (expected_value == actual_value)
+
+        if not are_almost_equal:
+            self.failRelationsNotEqual(expected, actual)
+
+    def almostEqual(first, second, places):
+        return round(abs(second-first), places) == 0
+    almostEqual = staticmethod(almostEqual)
+    
+    def failRelationsNotEqual(self, first, second):
+        """Fail the test because the two specified relations are not equal."""
+        raise self.failureException, \
+              '%s != %s' % (first, second)
+
+    def sortRelations(self, *relations):
+        sorted_relations = []
+        for r in relations:
+            r = list(r)
+            r.sort()
+            sorted_relations.append(r)
+        return sorted_relations
+
 
 class _TextTestResult(unittest._TextTestResult):
 
