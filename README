@@ -16,10 +16,10 @@ ordering of records in a relation, in practice this can be somewhat
 difficult for a number of operations in Pig.
 
 2) PigUnit keeps a static reference to the Pig run time which prevents
-the implementation of isolated tests.  This can result in tests which
-passing tests that should be failing and vice versa.  This could also
-result in non-deterministic failing of tests that should be failing
-if the ordering of test execution is changing.
+the implementation of isolated tests.  This can result in passing tests 
+that should be failing and vice versa.  This could also result in the
+non-deterministic failing of tests that should be deterministically 
+failing, as the ordering of test execution changes.
 
 3) PigUnit currently only works with Pig 0.8+ (though anyone is free
 to back port it).  However, due to the dynamic nature of python it 
