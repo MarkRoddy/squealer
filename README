@@ -57,7 +57,7 @@ the event of a test failure or error, the path to this temp file is
 printed with the error report to provide an ease in debugging the actual
 script that was executed.
 
-2) The majority of useful output from the Pig runtime that useful in 
+2) The majority of output from the Pig runtime which is useful in 
 debugging your scripts is provided via apache logging mechnisims.  
 Unfortunately, the majority of information providied via logging is 
 quite unuseful.  For this reason, all logging is turned off by default.
