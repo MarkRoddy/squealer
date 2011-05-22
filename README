@@ -1,5 +1,6 @@
 Squealer is a jython library for unit testing Apache Pig scripts.
 
+
 Motivation
 *****************************************
 Starting with v0.8 Pig comes with a library known as PigUnit that can
@@ -41,19 +42,31 @@ install this can be accomplished by dropping the directory into
 /usr/share/jython/Lib
 
 
-* Examples
+Examples
 *****************************************
 In tests/test_examples.py is a test case that illustrates how to define
 a unit test with Squealer and some common tasks you may want to perform
 in one.
 
 
-* Debugging
+Debugging
 *****************************************
-Note that the script executed is in the error output
+1) After performing parameter subsitition and alias overriding, Squealer
+writes out a temp file containing the actual pig code to be executed. In
+the event of a test failure or error, the path to this temp file is 
+printed with the error report to provide an ease in debugging the actual
+script that was executed.
+
+2) The majority of useful output from the Pig runtime that useful in 
+debugging your scripts is provided via apache logging mechnisims.  
+Unfortunately, the majority of information providied via logging is 
+quite unuseful.  For this reason, all logging is turned off by default.
+However, if you see a failure message you do not understand you can use
+the '-v' option when running the python file with your tests (assuming
+you are using Squealer's main() function).
 
 
-* Common issues
+Common issues
 *****************************************
 1) You see the following error message:
 ImportError: no module named squealer
