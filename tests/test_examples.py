@@ -54,6 +54,35 @@ class ExampleTest(PigTest):
         # relation and pass in the expected records
         self.assertRelationEquals("queries_limit", output)
 
+    def testOverrideLoadCommandWithSpecifiedData(self):
+        """Explicitly specify the set of records a relation should have"""
+        # In order to thoroughly test a pig script you will likely have to
+        # specify a variety of inputs to test different code paths. You
+        # could specify a different input file for each of these cases,
+        # but in practice, having the data within the fixture for the
+        # condition being tested is much easier to understand and debug
+        # than having to jump back and forth between different input files.
+        input_data = [
+            ("yahoo", 10),
+            ("twitter", 7),
+            ("facebook", 10),
+            ("yahoo", 15),
+            ("facebook", 2),
+            ("a", 1),
+            ("b", 2),
+            ("c", 3),
+            ("d", 4),
+            ("e", 5),
+            ]
+        self.override_data("data", input_data)
+
+        output = [
+            ("yahoo",25),
+            ("facebook",12),
+            ("twitter",7),
+            ]
+        self.assertRelationEquals("queries_limit", output)
+
 
 if __name__ == '__main__':
     main()
