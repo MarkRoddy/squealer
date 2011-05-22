@@ -34,9 +34,9 @@ class TestPigProxy(unittest.TestCase):
             ]
         proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
-            "(twitter,7L)",
+            "(yahoo,25)",
+            "(facebook,15)",
+            "(twitter,7)",
             ]
         self.assertOutput(proxy, "queries_limit", output)
 
@@ -49,9 +49,9 @@ class TestPigProxy(unittest.TestCase):
             ]
         proxy = PigProxy.from_file(self.PIG_SCRIPT, args)        
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
-            "(twitter,7L)",
+            "(yahoo,25)",
+            "(facebook,15)",
+            "(twitter,7)",
             ]
         self.assertLastOutput(proxy, output)
 
@@ -76,9 +76,9 @@ class TestPigProxy(unittest.TestCase):
             "e\t5",
             ]
         output = [
-        "(yahoo,25L)",
-        "(facebook,12L)",
-        "(twitter,7L)",
+        "(yahoo,25)",
+        "(facebook,12)",
+        "(twitter,7)",
             ]
         proxy.override_to_data("data", input_data)
         self.assertOutput(proxy, "queries_limit", output)
@@ -104,9 +104,9 @@ class TestPigProxy(unittest.TestCase):
             "e\t5",
             ]
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
-            "(twitter,7L)",
+            "(yahoo,25)",
+            "(facebook,15)",
+            "(twitter,7)",
             ]
         proxy.override_to_data("data", input_data)
         self.assertOutput(proxy, "queries_limit", output);
@@ -121,8 +121,8 @@ class TestPigProxy(unittest.TestCase):
         proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         proxy.override("queries_limit", "queries_limit = LIMIT queries_ordered 2;");
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
+            "(yahoo,25)",
+            "(facebook,15)",
             ]
         self.assertLastOutput(proxy, output);
 
@@ -137,9 +137,9 @@ class TestPigProxy(unittest.TestCase):
             ])        
         proxy = PigProxy(script);
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
-            "(twitter,7L)",
+            "(yahoo,25)",
+            "(facebook,15)",
+            "(twitter,7)",
             ]
         self.assertLastOutput(proxy, output)
 
@@ -154,9 +154,9 @@ class TestPigProxy(unittest.TestCase):
             ])
         proxy = PigProxy(script)
         expected = \
-        "(yahoo,25L)\n" + \
-        "(facebook,15L)\n" + \
-        "(twitter,7L)"
+        "(yahoo,25)\n" + \
+        "(facebook,15)\n" + \
+        "(twitter,7)"
         self.assertEquals(expected, '\n'.join([str(i) for i in proxy.get_alias("queries_limit")]))
 
     def testWithUdf(self):
@@ -183,9 +183,9 @@ class TestPigProxy(unittest.TestCase):
             ]
         proxy = PigProxy.from_file(self.PIG_SCRIPT, arg_files = argsFile)
         output = [
-            "(yahoo,25L)",
-            "(facebook,15L)",
-            "(twitter,7L)",
+            "(yahoo,25)",
+            "(facebook,15)",
+            "(twitter,7)",
             ]
         self.assertOutput(proxy, "queries_limit", output)
 
