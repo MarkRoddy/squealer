@@ -83,6 +83,28 @@ class ExampleTest(PigTest):
             ]
         self.assertRelationEquals("queries_limit", output)
 
+    def testOverrideQueryUsed(self):
+        """Override the query/command used to generate data in a relation"""
+        # In addtion to being able to override a relation with a specific set
+        # of records, you can also override the query that generates that
+        # relation. This is especially useful when the data you want in the 
+        # relation can be easier expressed as a function of the input rather than
+        # hard coding of the actual records. You can also think of this as
+        # a method of 'mocking' the pig script in order to test a single portion
+        # of it.
+
+        # To override the relation with a new command specify the name of the relation
+        # you are overriding as well as the command to be substituted. Note that no
+        # checking is performed on the command specified so it is up to you to ensure
+        # that the overriden command is valid in the context of the script being tested.
+        self.override_query("queries_limit", "queries_limit = LIMIT queries_ordered 2;");
+
+        output = [
+            ('yahoo',25),
+            ('facebook',15),
+            ]
+        self.assertLastStoreEquals(output)
+
 
 if __name__ == '__main__':
     main()
