@@ -23,7 +23,11 @@ class PigTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         unittest.TestCase.__init__(self, *args, **kwargs)
         if not self.Args:
-            self.Args = {}
+            self.Args = {}        
+        if "reducers" not in self.Args:
+            self.Args["reducers"] = 1
+        if "n" not in self.Args:
+            self.Args["n"] = 3
         arglist = ["%s=%s" % (k, v) for (k, v) in self.Args.iteritems()]
         self._proxy = PigProxy.from_file(self.PigScript, arglist)
 
