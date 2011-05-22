@@ -1,0 +1,6 @@
+
+* Add support for bags in assert*() functions
+* Optionally run tests on a hadoop cluster instead of in local mode
+* Test against multiple combinations of Jython and Pig versions
+* F@!king packages, how do they work? (in Jython at least)
+
