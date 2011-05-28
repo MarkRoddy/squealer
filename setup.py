@@ -14,6 +14,10 @@ requires_java = {
         ('org.apache.pig','pig','0.8.3'),
         ('org.apache.hadoop', 'hadoop-core', '0.20.203.0'),
         ('log4j', 'log4j', '1.2.16')
+    ],
+    'exclusions':[
+        ('ant', 'ant'),
+        ('junit', 'junit')
     ]
 }
 
