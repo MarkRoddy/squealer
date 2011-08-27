@@ -64,6 +64,22 @@ class PigTest(unittest.TestCase):
         """
         self._proxy.override(alias, query)
 
+    def assertSchema(self, alias, schema_string):
+        """
+        Assert that the specified relation has the supplied schema.
+        schema_string should be a valid Pig schema notiation.
+        """
+        remove_whitespace = lambda s: ''.join(s.split())
+        # Remove all white space
+        schema_string = remove_whitespace(schema_string)
+        if not schema_string.startswith('('):
+            schema_string = '(' + schema_string
+        if not schema_string.endswith(')'):
+            schema_string += ')'
+        actual_schema = self._proxy.schemaFor(alias)
+        actual_schema = remove_whitespace(actual_schema)
+        self.assertEqual(actual_schema, schema_string)
+    
     def assertRelationEquals(self, alias, expected, ignore_ordering = True):
         """Assert that the specified alias has the expected set of records"""
         actual = self.relation(alias)

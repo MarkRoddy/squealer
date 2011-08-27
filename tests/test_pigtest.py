@@ -152,6 +152,43 @@ class TestPigTest(unittest.TestCase):
         test = some_test('testOverride')
         test.testOverride()
 
+    def testAssertSchema_AreEqual(self):
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testAssertSchema_AreEqual(self):
+                self.assertSchema('queries_limit', 'query:chararray,count:long')
+        test = some_test('testAssertSchema_AreEqual')
+        test.testAssertSchema_AreEqual()
+
+    def testAssertSchema_NotEqual(self):
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testAssertSchema_NotEqual(self):
+                self.assertSchema('queries_limit', 'query:chararray,count:long,notes:chararray')
+        test = some_test('testAssertSchema_NotEqual')
+        self.assertRaises(self.failureException, test.testAssertSchema_NotEqual)
+
+    def testAssertSchema_AreEqual_Whitespace_Ignored(self):
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testAssertSchema_AreEqual_Whitespace_Ignored(self):
+                self.assertSchema('queries_limit', ' query:  chararray,  count:long ')
+        test = some_test('testAssertSchema_AreEqual_Whitespace_Ignored')
+        test.testAssertSchema_AreEqual_Whitespace_Ignored()
+
+
 class TestPigFloatingPointTest(unittest.TestCase):
 
     PIG_SCRIPT = "tests/pig-scripts/top_queries_floating_point.pig"
