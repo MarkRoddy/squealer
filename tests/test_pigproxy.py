@@ -217,5 +217,27 @@ class TestPigProxy(unittest.TestCase):
         proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
         self.assertEqual("queries_limit", proxy.last_stored_alias_name())
 
+    def testSchemaFor(self):
+        args = [
+            "n=3",
+            "reducers=1",
+            "input=" + self.INPUT_FILE,
+            "output=top_3_queries",
+            ]
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
+        schema = proxy.schemaFor('queries_sum')
+        self.assertEqual(schema, '(query: chararray,count: long)')
+
+    def testSchemaFor_ThroughJythonUDF(self):
+        script = '\n'.join([
+            "Register 'tests/udfs.py' using jython as udfs;",
+            "data = LOAD '%s' AS (query:CHARARRAY, count:INT);" % self.INPUT_FILE,
+            "queries = FOREACH data GENERATE query, udfs.concat(query,query) AS doublequery;",
+            "STORE queries INTO 'top_3_queries';",
+            ])
+        proxy = PigProxy(script);
+        schema = proxy.schemaFor('queries')
+        self.assertEqual(schema, '(query: chararray,doublequery: chararray)')
+
 if __name__ == '__main__':
     unittest.main()

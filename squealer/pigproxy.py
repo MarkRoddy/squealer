@@ -120,17 +120,23 @@ class PigProxy(object):
         if alias in self.alias_overrides:
             del self.alias_overrides[alias]        
 
+    def schemaFor(self, alias):
+        """
+        Returns string containing the schema of the specified alias
+        """
+        self.register_script()
+        sb = StringBuilder()
+        Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
+        return sb.toString()
+
     def override_to_data(self, alias, input_data):
         """
         Override a statement so that the alias results in having the
         specified set of data
         """
-        self.register_script()
-        sb = StringBuilder()
-        Schema.stringifySchema(sb, self.pig.dumpSchema(alias), DataType.TUPLE)
-        
+        schema = self.schemaFor(alias)
         destination = mktemp()
         cluster = Cluster(self.pig.getPigContext())
         cluster.copyContentFromLocalFile(input_data, destination, True)
-        self.override(alias, "%s = LOAD '%s' AS %s;" % (alias, destination, sb.toString()))
+        self.override(alias, "%s = LOAD '%s' AS %s;" % (alias, destination, schema))
 
