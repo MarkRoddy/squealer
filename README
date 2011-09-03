@@ -31,18 +31,20 @@ of Pig.
 
 Dependencies/Installation
 *****************************************
-Currently Squealer is tested against Pig 0.8.0 and Jython 2.2.1, though
+Currently Squealer is tested against Pig 0.8.1 and Jython 2.5.2, though
 if you can confirm/deny it's feasibility on other versions this information
 would be highly appreciated.  A version matrix is planned for the future
 to documented what combinations of these libraries are supported. Of note
 is that these versions are what is available in the Ubuntu 10.04 and 
 Cloudera apt repositories.
 
+Option 1:
 Once the dependencies are installed, installation of Squealer is as simple
-as dropping it into any directory in your PYTHONPATH.  For a stock Ubuntu
-install this can be accomplished by dropping the directory into 
-/usr/share/jython/Lib
+as dropping it into $JYTHONHOME/Lib
 
+Option 2:
+Install JIP (http://pypi.python.org/pypi/jip
+Run: jython setup.py install 
 
 Examples
 *****************************************
