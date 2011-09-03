@@ -186,7 +186,7 @@ class TestPigTest(unittest.TestCase):
             PigScript = self.PIG_SCRIPT
             def testAssertSchemaEquals_AreEqual(self):
                 self.assertSchemaEquals('queries_limit', 'query:chararray,count:long')
-        test = some_test('testAssertSchema_AreEqual')
+        test = some_test('testAssertSchemaEquals_AreEqual')
         test.testAssertSchemaEquals_AreEqual()
 
     def testAssertSchemaEquals_NotEqual(self):
@@ -197,7 +197,7 @@ class TestPigTest(unittest.TestCase):
                 }
             PigScript = self.PIG_SCRIPT
             def testAssertSchemaEquals_NotEqual(self):
-                self.assertSchema('queries_limit', 'query:chararray,count:long,notes:chararray')
+                self.assertSchemaEquals('queries_limit', 'query:chararray,count:long,notes:chararray')
         test = some_test('testAssertSchemaEquals_NotEqual')
         self.assertRaises(self.failureException, test.testAssertSchemaEquals_NotEqual)
 
@@ -209,7 +209,7 @@ class TestPigTest(unittest.TestCase):
                 }
             PigScript = self.PIG_SCRIPT
             def testAssertSchemaEquals_AreEqual_Whitespace_Ignored(self):
-                self.assertSchema('queries_limit', ' query:  chararray,  count:long ')
+                self.assertSchemaEquals('queries_limit', ' query:  chararray,  count:long ')
         test = some_test('testAssertSchemaEquals_AreEqual_Whitespace_Ignored')
         test.testAssertSchemaEquals_AreEqual_Whitespace_Ignored()
 
