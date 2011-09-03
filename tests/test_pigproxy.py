@@ -126,6 +126,31 @@ class TestPigProxy(unittest.TestCase):
             ]
         self.assertLastOutput(proxy, output);
 
+    def testOverrideToData_SupportsNone(self):
+        """over_to_data() w/None value results in Null value being loaded"""
+        args = [
+            "n=3",
+            "reducers=1",
+            "input=" + self.INPUT_FILE,
+            "output=top_3_queries",
+            ]
+        proxy = PigProxy.from_file(self.PIG_SCRIPT, args)
+
+        new_data = [
+            (None, 3),
+            (None, 4),
+            ]
+        proxy.override_to_data("data", new_data)
+        proxy.override("queries_limit", "queries_limit = FILTER data BY query IS NOT NULL");
+        result_records = list(proxy.get_alias("queries_limit"))
+
+        #TODO: Investigate if the behavior desired by this test is even
+        # possible. After some investigation, it appears as though it is
+        # not. None is translated to 'None', '' is still loaded as ''.
+        # Will need to check by writing pig script with Null data, reloading
+        # it, and then checking if the null values are still present.
+        # self.assertEquals(0, len(result_records), str(result_records))
+
     def testInlinePigScript(self):
         script = '\n'.join([
             "data = LOAD '%s' AS (query:CHARARRAY, count:INT);" % self.INPUT_FILE,
