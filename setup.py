@@ -17,16 +17,26 @@ requires_java = {
     ],
     'exclusions':[
         ('ant', 'ant'),
+        ('org.apache.ant', 'ant'),
         ('junit', 'junit')
     ]
 }
 
-import squealer
+def get_squealer_version():
+    import re
+    root_module_file = open('./squealer/__init__.py')
+    for line in root_module_file.readlines():
+        if line.startswith('__version__'):
+            matches = re.findall("__version__ = '(.*)'", line)
+            if matches:
+                return matches[0]
+            else:
+                return 'UNKNOWN_VERSION'
 
 setup(
     name='squealer',
     author='markroddy',
-    version = squealer.__version__,
+    version = get_squealer_version(),
     description='Squealer is a Jython library for unit testing Apache Pig scripts.',
     install_requires=['jip'],
     requires_java=requires_java,
