@@ -64,7 +64,7 @@ class PigTest(unittest.TestCase):
         """
         self._proxy.override(alias, query)
 
-    def assertSchema(self, alias, schema_string):
+    def assertSchemaEquals(self, alias, schema_string):
         """
         Assert that the specified relation has the supplied schema.
         schema_string should be a valid Pig schema notiation.

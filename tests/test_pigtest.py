@@ -177,41 +177,41 @@ class TestPigTest(unittest.TestCase):
         test = some_test('testNulValue')
         test.testNulValue()
 
-    def testAssertSchema_AreEqual(self):
+    def testAssertSchemaEquals_AreEqual(self):
         class some_test(PigTest):
             Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
             PigScript = self.PIG_SCRIPT
-            def testAssertSchema_AreEqual(self):
-                self.assertSchema('queries_limit', 'query:chararray,count:long')
+            def testAssertSchemaEquals_AreEqual(self):
+                self.assertSchemaEquals('queries_limit', 'query:chararray,count:long')
         test = some_test('testAssertSchema_AreEqual')
-        test.testAssertSchema_AreEqual()
+        test.testAssertSchemaEquals_AreEqual()
 
-    def testAssertSchema_NotEqual(self):
+    def testAssertSchemaEquals_NotEqual(self):
         class some_test(PigTest):
             Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
             PigScript = self.PIG_SCRIPT
-            def testAssertSchema_NotEqual(self):
+            def testAssertSchemaEquals_NotEqual(self):
                 self.assertSchema('queries_limit', 'query:chararray,count:long,notes:chararray')
-        test = some_test('testAssertSchema_NotEqual')
-        self.assertRaises(self.failureException, test.testAssertSchema_NotEqual)
+        test = some_test('testAssertSchemaEquals_NotEqual')
+        self.assertRaises(self.failureException, test.testAssertSchemaEquals_NotEqual)
 
-    def testAssertSchema_AreEqual_Whitespace_Ignored(self):
+    def testAssertSchemaEquals_AreEqual_Whitespace_Ignored(self):
         class some_test(PigTest):
             Parameters = {
                 "input" : self.INPUT_FILE,
                 "output" : "top_3_queries",
                 }
             PigScript = self.PIG_SCRIPT
-            def testAssertSchema_AreEqual_Whitespace_Ignored(self):
+            def testAssertSchemaEquals_AreEqual_Whitespace_Ignored(self):
                 self.assertSchema('queries_limit', ' query:  chararray,  count:long ')
-        test = some_test('testAssertSchema_AreEqual_Whitespace_Ignored')
-        test.testAssertSchema_AreEqual_Whitespace_Ignored()
+        test = some_test('testAssertSchemaEquals_AreEqual_Whitespace_Ignored')
+        test.testAssertSchemaEquals_AreEqual_Whitespace_Ignored()
 
 
 class TestPigFloatingPointTest(unittest.TestCase):
