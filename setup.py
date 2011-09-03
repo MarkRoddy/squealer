@@ -21,9 +21,12 @@ requires_java = {
     ]
 }
 
+import squealer
+
 setup(
     name='squealer',
     author='markroddy',
+    version = squealer.__version__,
     description='Squealer is a Jython library for unit testing Apache Pig scripts.',
     install_requires=['jip'],
     requires_java=requires_java,
