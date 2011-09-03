@@ -93,3 +93,10 @@ dependencies.  You will need to set your class path so that they can be
 found.  On a system with Ubuntu/Cloudera packages installed the following
 should get you going:
 export CLASSPATH=/usr/lib/pig/*:/usr/share/java/*:/usr/lib/hadoop/*
+
+Contrib
+*****************************************
+Thanks to the following people:
+Ning Sun: for configuring setup.py
+
+
