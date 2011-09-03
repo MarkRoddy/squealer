@@ -30,8 +30,7 @@ def get_squealer_version():
             matches = re.findall("__version__ = '(.*)'", line)
             if matches:
                 return matches[0]
-            else:
-                return 'UNKNOWN_VERSION'
+    return 'UNKNOWN_VERSION'
 
 setup(
     name='squealer',
