@@ -152,6 +152,31 @@ class TestPigTest(unittest.TestCase):
         test = some_test('testOverride')
         test.testOverride()
 
+    def testAssertRelationEquals_NullInExpectedValue(self):
+        """Jython None value should be interpreted as a Pig Null in assertion"""
+        class some_test(PigTest):
+            Parameters = {
+                "input" : self.INPUT_FILE,
+                "output" : "top_3_queries",
+                }
+            PigScript = self.PIG_SCRIPT
+            def testNulValue(self):
+                pig_cmd = "queries_limit = FOREACH queries_ordered GENERATE query, Null;"
+                self.override_query("queries_limit", pig_cmd);
+                output = [
+                    ('a', None),
+                    ('b', None),
+                    ('c', None),
+                    ('d', None),
+                    ('e', None),
+                    ('facebook', None),
+                    ('twitter', None),
+                    ('yahoo', None),
+                    ]
+                self.assertLastStoreEquals(output)
+        test = some_test('testNulValue')
+        test.testNulValue()
+
     def testAssertSchema_AreEqual(self):
         class some_test(PigTest):
             Parameters = {
