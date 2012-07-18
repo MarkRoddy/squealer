@@ -26,8 +26,8 @@ to back port it).  However, due to the dynamic nature of python it
 is trivial to write a single library which supports multiple versions 
 of Pig.
 
-4) Language preference.  Also, this yak isn't going to shave itself.
-
+4) A general language preference of Python over java.  Also, this yak 
+isn't going to shave itself.
 
 Dependencies/Installation
 *****************************************
