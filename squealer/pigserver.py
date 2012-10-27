@@ -39,9 +39,19 @@ class PigServer(BasePigServer):
         Overriding as this method in the base class prints to stdout
         for no good reason.
         """
-        lp = self.getPlanFromAlias(alias, "describe")
-        lp = self.compileLp(alias, False)
+        if hasattr(self, 'getPlanFromAlias'):
+            # for pig 0.8-
+            lp = self.getPlanFromAlias(alias, "describe")
+            lp = self.compileLp(alias, False)
 
-        for lo in lp.getLeaves():
-            if lo.getAlias() == alias:
-                return lo.getSchema()
+            for lo in lp.getLeaves():
+                if lo.getAlias() == alias:
+                    return lo.getSchema()
+        else:
+            # For pig 0.9+, conditionally importing so as not
+            # to break on older versions
+            import org.apache.pig.newplan.logical.Util
+            op = self.getOperatorForAlias(alias)
+            schema = op.getSchema()
+            s = org.apache.pig.newplan.logical.Util.translateSchema(schema)
+            return s            
